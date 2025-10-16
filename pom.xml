@@ -79,13 +79,6 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.seeseemelk</groupId>
-            <artifactId>MockBukkit-v1.21</artifactId>
-            <version>3.133.2</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -122,10 +115,6 @@
                 <configuration>
                     <junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
                     <trimStackTrace>false</trimStackTrace>
-<!--                    <classpathDependencyExcludes>-->
-<!--                        <classpathDependencyExclude>org.spigotmc:spigot-api</classpathDependencyExclude>-->
-<!--                        <classpathDependencyExclude>io.papermc.paper:paper-api</classpathDependencyExclude>-->
-<!--                    </classpathDependencyExcludes>-->
                 </configuration>
             </plugin>
 
@@ -147,7 +136,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.0</version>
 
                 <configuration>
                     <relocations>

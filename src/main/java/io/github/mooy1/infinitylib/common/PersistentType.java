@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -14,14 +15,17 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 import lombok.RequiredArgsConstructor;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,48 +129,52 @@ public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
             }
     );
 
-    public static final PersistentDataType<byte[], Location> LOCATION = new PersistentType<>(
-            byte[].class, Location.class,
-            location -> {
-                try {
-                    Map<String, Object> m = location.serialize();
-                    YamlConfiguration yml = new YamlConfiguration();
-                    yml.set("l", m);
-                    return yml.saveToString().getBytes(StandardCharsets.UTF_8);
-                }
-                catch (Exception e) {
-                    log.error("Failed to serialize location.", e);
-                    return new byte[0];
-                }
-            },
-            arr -> {
-                if (arr.length == 0) return new Location(null, 0, 0, 0);
+    public static final PersistentDataType<long[], Location> LOCATION = new PersistentDataType<long[], Location>() {
+        @Override
+        public @NotNull Class<long[]> getPrimitiveType() {
+            return long[].class;
+        }
 
-                try {
-                    String s = new String(arr, StandardCharsets.UTF_8);
-                    YamlConfiguration yml = new YamlConfiguration();
-                    yml.loadFromString(s);
+        @Override
+        public @NotNull Class<Location> getComplexType() {
+            return Location.class;
+        }
 
-                    Object raw = yml.get("l");
-                    if (!(raw instanceof  Map)) {
-                        log.error("Location YAML missing 'l' map or wrong type: {}", raw == null ? "null" : raw.getClass());
-                        return new Location(null,0,0,0);
-                    }
+        @Override
+        public long @NotNull [] toPrimitive(@NotNull Location loc, @NotNull PersistentDataAdapterContext ctx) {
+            long x = Double.doubleToLongBits(loc.getX());
+            long y = Double.doubleToLongBits(loc.getY());
+            long z = Double.doubleToLongBits(loc.getZ());
 
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> m = (Map<String, Object>) raw;
-                    return Location.deserialize(m);
-                }
-                catch (InvalidConfigurationException ex) {
-                    log.error("Invalid YAML while deserializing Location.", ex);
-                    return new Location(null,0,0,0);
-                }
-                catch (Exception e) {
-                    log.error("Failed to deserialize Location.", e);
-                    return new Location(null, 0, 0, 0);
-                }
+            UUID uuid = (loc.getWorld() == null) ? null : loc.getWorld().getUID();
+            long msb = (uuid == null) ? 0L : uuid.getMostSignificantBits();
+            long lsb = (uuid == null) ? 0L : uuid.getLeastSignificantBits();
+
+            return new long[]{x, y, z, msb, lsb};
+        }
+
+        @Override
+        public @NotNull Location fromPrimitive(long @NotNull [] data, @NotNull PersistentDataAdapterContext ctx) {
+            if (data.length < 5) {
+                return new Location(null,0,0,0);
             }
-    );
+
+            double x = Double.longBitsToDouble(data[0]);
+            double y = Double.longBitsToDouble(data[1]);
+            double z = Double.longBitsToDouble(data[2]);
+
+            long msb = data[3];
+            long lsb = data[4];
+
+            World world = null;
+            if (msb != 0L || lsb != 0L) {
+                UUID uuid = new UUID(msb, lsb);
+                world = Bukkit.getWorld(uuid);
+            }
+
+            return new Location(world, x, y, z);
+        }
+    };
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static final PersistentDataType<byte[], List<String>> STRING_LIST = new PersistentType<byte[], List<String>>(
