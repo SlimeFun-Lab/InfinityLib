@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.common;
 
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
@@ -11,7 +13,6 @@ import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.setup.SlimefunItemSetup;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 import static io.github.mooy1.infinitylib.common.StackUtils.getId;
 import static io.github.mooy1.infinitylib.common.StackUtils.getIdOrType;
@@ -39,7 +40,7 @@ class TestStackUtils {
     @Test
     void testGetId() {
         CustomItemDataService dataService = Slimefun.getItemDataService();
-        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD;
+        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.item();
         ItemStack item2 = new ItemStack(Material.IRON_BLOCK);
 
         assertEquals(getId(item1), dataService.getItemData(item1).orElse(null));
@@ -51,7 +52,7 @@ class TestStackUtils {
     @Test
     void testGetIdOrType() {
         CustomItemDataService dataService = Slimefun.getItemDataService();
-        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD;
+        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.item();
         ItemStack item2 = new ItemStack(Material.IRON_BLOCK);
 
         assertEquals(getIdOrType(item1), dataService.getItemData(item1).orElse(item1.getType().name()));
@@ -60,7 +61,7 @@ class TestStackUtils {
 
     @Test
     void testItemById() {
-        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD;
+        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.item();
         String id1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.getItemId();
         String id2 = Material.IRON_BLOCK.name();
 
@@ -70,7 +71,7 @@ class TestStackUtils {
 
     @Test
     void testItemByIdOrType() {
-        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD;
+        ItemStack item1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.item();
         ItemStack item2 = new ItemStack(Material.IRON_BLOCK);
         String id1 = SlimefunItems.ADVANCED_CIRCUIT_BOARD.getItemId();
         String id2 = item2.getType().name();
@@ -85,9 +86,9 @@ class TestStackUtils {
         ItemStack air = new ItemStack(Material.AIR);
 
         ItemStack stone = new ItemStack(Material.STONE);
-        ItemStack salt = SlimefunItems.SALT;
+        ItemStack salt = SlimefunItems.SALT.item();
         ItemStack sugar = new ItemStack(Material.SUGAR);
-        ItemStack dust = new CustomItemStack(Material.SUGAR, "Dust");
+        ItemStack dust = CustomItemStack.create(Material.SUGAR, "Dust");
 
         assertTrue(isSimilar(nul, nul));
         assertTrue(isSimilar(nul, air));

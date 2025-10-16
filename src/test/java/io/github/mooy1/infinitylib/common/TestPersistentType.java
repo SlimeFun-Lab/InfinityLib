@@ -47,7 +47,7 @@ class TestPersistentType {
         container.set(key, PersistentType.ITEM_STACK, item);
         assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
 
-        item = SlimefunItems.ANCIENT_ALTAR;
+        item = SlimefunItems.ANCIENT_ALTAR.item();
         container.set(key, PersistentType.ITEM_STACK, item);
         assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
     }
@@ -59,7 +59,7 @@ class TestPersistentType {
         container.set(key, PersistentType.ITEM_STACK_OLD, item);
         assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
 
-        item = SlimefunItems.ANCIENT_ALTAR;
+        item = SlimefunItems.ANCIENT_ALTAR.item();
         container.set(key, PersistentType.ITEM_STACK_OLD, item);
         assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
     }
@@ -71,7 +71,7 @@ class TestPersistentType {
         container.set(key, PersistentType.ITEM_STACK_LIST, list);
         assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
 
-        list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD);
+        list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD.item());
         container.set(key, PersistentType.ITEM_STACK_LIST, list);
         assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
     }

@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.machines;
 
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
@@ -15,7 +17,6 @@ import io.github.mooy1.infinitylib.groups.SubGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,8 +40,8 @@ class TestCraftingBlock {
         machine = new CraftingBlock(new SubGroup("key", new ItemStack(Material.DIAMOND)),
                 new SlimefunItemStack("ID", Material.STONE, "name"),
                 RecipeType.ANCIENT_ALTAR, new ItemStack[0]);
-        output = new CustomItemStack(SlimefunItems.SALT, 2);
-        input1 = SlimefunItems.COPPER_DUST.clone();
+        output = CustomItemStack.create(SlimefunItems.SALT.item(), 2);
+        input1 = SlimefunItems.COPPER_DUST.item().clone();
         input2 = new ItemStack(Material.NETHERITE_BLOCK, 2).clone();
     }
 

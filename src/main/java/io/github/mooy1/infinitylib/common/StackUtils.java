@@ -24,13 +24,10 @@ public final class StackUtils {
 
     @Nullable
     public static String getId(ItemStack item) {
-        if (item instanceof SlimefunItemStack) {
-            return ((SlimefunItemStack) item).getItemId();
-        } else if (item.hasItemMeta()) {
-            return getId(item.getItemMeta());
-        } else {
-            return null;
-        }
+        if (item == null || item.getType().isAir()) return null;
+
+        SlimefunItem sf = SlimefunItem.getByItem(item);
+        return (sf != null) ? sf.getId() : null;
     }
 
     @Nullable
@@ -40,14 +37,10 @@ public final class StackUtils {
 
     @Nonnull
     public static String getIdOrType(ItemStack item) {
-        if (item instanceof SlimefunItemStack) {
-            return ((SlimefunItemStack) item).getItemId();
-        } else if (item.hasItemMeta()) {
-            String id = getId(item.getItemMeta());
-            return id == null ? item.getType().name() : id;
-        } else {
-            return item.getType().name();
-        }
+        if (item == null || item.getType().isAir()) return "AIR";
+
+        SlimefunItem sf = SlimefunItem.getByItem(item);
+        return (sf != null) ? sf.getId() : item.getType().name();
     }
 
     @Nullable

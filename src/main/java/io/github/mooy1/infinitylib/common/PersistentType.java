@@ -9,6 +9,8 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+
 import lombok.RequiredArgsConstructor;
 
 import org.bukkit.Location;
@@ -21,8 +23,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-
 /**
  * A class with some persistent data types
  *
@@ -34,7 +34,7 @@ public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
 
     public static final PersistentDataType<byte[], ItemStack> ITEM_STACK = new PersistentType<>(
             byte[].class, ItemStack.class,
-            itemStack -> {
+            (ItemStack itemStack) -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 try (BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes)) {
                     output.writeObject(itemStack);
@@ -51,7 +51,7 @@ public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    return new CustomItemStack(Material.STONE, "&cERROR");
+                    return CustomItemStack.create(Material.STONE, "&cERROR");
                 }
             }
     );
@@ -143,24 +143,24 @@ public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
      * Only use this if you were using it prior to the slimefun breaking changes
      */
     @Deprecated
-    public static final PersistentDataType<String, ItemStack> ITEM_STACK_OLD = new PersistentType<>(
+    public static final PersistentDataType<String, ItemStack> ITEM_STACK_OLD = new PersistentType<String, ItemStack>(
             String.class, ItemStack.class,
-            itemStack -> {
+            (ItemStack itemStack) -> {
                 YamlConfiguration config = new YamlConfiguration();
                 config.set("item", itemStack);
                 return config.saveToString();
             },
-            string -> {
+            (String string) -> {
                 YamlConfiguration config = new YamlConfiguration();
                 try {
                     config.loadFromString(string);
                 }
                 catch (InvalidConfigurationException e) {
                     e.printStackTrace();
-                    return new CustomItemStack(Material.STONE, "&cERROR");
+                    return CustomItemStack.create(Material.STONE, "&cERROR");
                 }
                 ItemStack item = config.getItemStack("item");
-                return item != null ? item : new CustomItemStack(Material.STONE, "&cERROR");
+                return item != null ? item : CustomItemStack.create(Material.STONE, "&cERROR");
             }
     );
 
