@@ -11,7 +11,11 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 import lombok.Setter;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,13 +60,15 @@ public class CraftingBlock extends MenuBlock {
                     onSuccessfulCraft(menu, output);
                     menu.pushItem(output, layout.outputSlots());
                     recipe.consume(input);
-                    p.sendMessage(ChatColor.GREEN + "Successfully Crafted: " + ItemUtils.getItemName(output));
+
+                    Component itemName = LegacyComponentSerializer.legacySection().deserialize(ItemUtils.getItemName(output));
+                    p.sendMessage(Component.text("Successfully Crafted: ", NamedTextColor.GREEN).append(itemName));
                 } else {
-                    p.sendMessage(ChatColor.GOLD + "Not Enough Room!");
+                    p.sendMessage(Component.text("Not Enough Room!", NamedTextColor.GOLD));
                 }
             }
         } else {
-            p.sendMessage(ChatColor.RED + "Invalid Recipe!");
+            p.sendMessage(Component.text("Invalid Recipe!", NamedTextColor.RED));
         }
     }
 
@@ -86,6 +92,7 @@ public class CraftingBlock extends MenuBlock {
         });
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     @Nonnull
     public final CraftingBlock addRecipe(ItemStack output, ItemStack... inputs) {
         if (inputs.length == 0) {

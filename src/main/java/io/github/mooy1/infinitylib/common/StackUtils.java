@@ -13,8 +13,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+
+import net.kyori.adventure.text.Component;
+
+import java.awt.*;
+import java.util.Objects;
 
 @UtilityClass
 @ParametersAreNonnullByDefault
@@ -23,7 +27,7 @@ public final class StackUtils {
     private static final NamespacedKey ID_KEY = Slimefun.getItemDataService().getKey();
 
     @Nullable
-    public static String getId(ItemStack item) {
+    public static String getId(@Nullable ItemStack item) {
         if (item == null || item.getType().isAir()) return null;
 
         SlimefunItem sf = SlimefunItem.getByItem(item);
@@ -36,7 +40,7 @@ public final class StackUtils {
     }
 
     @Nonnull
-    public static String getIdOrType(ItemStack item) {
+    public static String getIdOrType(@Nullable ItemStack item) {
         if (item == null || item.getType().isAir()) return "AIR";
 
         SlimefunItem sf = SlimefunItem.getByItem(item);
@@ -74,12 +78,15 @@ public final class StackUtils {
                 if (firstId == null) {
                     if (getId(secondMeta) == null) {
                         if (first.getType() == second.getType()) {
-                            if (firstMeta.hasDisplayName()) {
-                                return secondMeta.hasDisplayName()
-                                        && firstMeta.getDisplayName().equals(secondMeta.getDisplayName());
-                            } else {
-                                return !secondMeta.hasDisplayName();
-                            }
+                            boolean aHas = firstMeta.hasDisplayName();
+                            boolean bHas = secondMeta.hasDisplayName();
+
+                            if (aHas != bHas) return false;
+                            if (!aHas) return true;
+
+                            Component a = firstMeta.displayName();
+                            Component b = secondMeta.displayName();
+                            return Objects.equals(a, b);
                         } else {
                             return false;
                         }

@@ -56,12 +56,12 @@ class TestPersistentType {
     @Disabled(value = "MockBukkit issue")
     void testItemStackOld() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
-        container.set(key, PersistentType.ITEM_STACK_OLD, item);
-        assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
+        container.set(key, PersistentType.ITEM_STACK, item);
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
 
         item = SlimefunItems.ANCIENT_ALTAR.item();
-        container.set(key, PersistentType.ITEM_STACK_OLD, item);
-        assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
+        container.set(key, PersistentType.ITEM_STACK, item);
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
     }
 
     @Test
