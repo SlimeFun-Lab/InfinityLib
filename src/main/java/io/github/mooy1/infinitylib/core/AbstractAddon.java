@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib.core;
 
-import java.io.File;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,9 +9,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
 import io.github.mooy1.infinitylib.InfinityLib;
 import io.github.mooy1.infinitylib.commands.AddonCommand;
@@ -66,18 +63,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     /**
      * Addon Testing Constructor
      */
-    public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
-                            String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey) {
-        this(loader, description, dataFolder, file, githubUserName, githubRepo, autoUpdateBranch, autoUpdateKey, Environment.TESTING);
-    }
-
-    /**
-     * Library Testing Constructor
-     */
-    AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
-                  String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey,
-                  Environment environment) {
-        super(loader, description, dataFolder, file);
+    public AbstractAddon(String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey, Environment environment) {
+        super();
         this.updater = null;
         this.environment = environment;
         this.githubUserName = githubUserName;
