@@ -49,14 +49,14 @@
         <dependency>
             <groupId>com.github.SlimeFun-Lab</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>3ea21da</version>
+            <version>6d5694e</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
+            <version>1.18.38</version>
             <scope>provided</scope>
         </dependency>
 
